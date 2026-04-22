@@ -2,8 +2,8 @@ class Imsg < Formula
   desc "Send and read iMessage / SMS from the terminal"
   homepage "https://github.com/jlikeme/imsg"
   url "https://github.com/jlikeme/imsg/releases/download/v0.5.0-1/imsg-macos.zip"
-  sha256 "c70385e83a37b5a08c6c90da7bd0e7fdebd40aa4af64410d860ed4960211dc8f"
   version "0.5.0-1"
+  sha256 "c70385e83a37b5a08c6c90da7bd0e7fdebd40aa4af64410d860ed4960211dc8f"
   license "MIT"
 
   # macOS Sonoma (14.0) or later required
