@@ -1,16 +1,33 @@
 class Imsg < Formula
   desc "Send and read iMessage / SMS from the terminal"
-  homepage "https://github.com/steipete/imsg"
-  url "https://github.com/steipete/imsg/releases/download/v0.5.0/imsg-macos-v0.5.0.zip"
-  sha256 "fc7ac307ea227e0398f9ebf89a48586f6dcda800fcacbc689df28e9a0f5f4cba"
+  homepage "https://github.com/jlikeme/imsg"
+  url "https://github.com/jlikeme/imsg.git",
+      tag: "v0.5.0-1"
   license "MIT"
 
   # macOS Sonoma (14.0) or later required
+  depends_on xcode: ["15.0", :build]
   depends_on macos: :sonoma
 
   def install
-    libexec.install "imsg"
-    Dir["*.bundle"].each do |bundle|
+    system "bash", "scripts/generate-version.sh"
+    system "swift", "package", "resolve"
+    system "bash", "scripts/patch-deps.sh"
+    system "swift", "build",
+           "-c", "release",
+           "--product", "imsg",
+           "--disable-sandbox"
+
+    binary = Dir[".build/**/release/imsg"].find { |p| File.file?(p) && File.executable?(p) }
+    odie "built imsg binary not found" unless binary
+
+    system "codesign", "--force", "--sign", "-",
+           "--entitlements", "Resources/imsg.entitlements",
+           "--identifier", "com.steipete.imsg",
+           binary
+
+    libexec.install binary => "imsg"
+    Dir[File.join(File.dirname(binary), "*.bundle")].each do |bundle|
       libexec.install bundle
     end
     bin.write_exec_script libexec/"imsg"
