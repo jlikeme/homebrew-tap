@@ -1,34 +1,16 @@
 class Imsg < Formula
-  desc "Send, read, and stream iMessage and SMS from the terminal"
-  homepage "https://github.com/jlikeme/imsg"
-  url "https://github.com/jlikeme/imsg.git",
-      tag:      "v0.5.0-1",
-      revision: "9754cdf632c679cc5df159dce6e90112bbd47692"
+  desc "Send and read iMessage / SMS from the terminal"
+  homepage "https://github.com/steipete/imsg"
+  url "https://github.com/steipete/imsg/releases/download/v0.5.0/imsg-macos-v0.5.0.zip"
+  sha256 "fc7ac307ea227e0398f9ebf89a48586f6dcda800fcacbc689df28e9a0f5f4cba"
   license "MIT"
-  head "https://github.com/jlikeme/imsg.git", branch: "main"
 
-  depends_on xcode: ["15.0", :build]
+  # macOS Sonoma (14.0) or later required
   depends_on macos: :sonoma
 
   def install
-    system "bash", "scripts/generate-version.sh"
-    system "swift", "package", "resolve"
-    system "bash", "scripts/patch-deps.sh"
-    system "swift", "build",
-           "-c", "release",
-           "--product", "imsg",
-           "--disable-sandbox"
-
-    binary = Dir[".build/**/release/imsg"].find { |p| File.file?(p) && File.executable?(p) }
-    odie "built imsg binary not found" unless binary
-
-    system "codesign", "--force", "--sign", "-",
-           "--entitlements", "Resources/imsg.entitlements",
-           "--identifier", "com.steipete.imsg",
-           binary
-
-    libexec.install binary => "imsg"
-    Dir[File.join(File.dirname(binary), "*.bundle")].each do |bundle|
+    libexec.install "imsg"
+    Dir["*.bundle"].each do |bundle|
       libexec.install bundle
     end
     bin.write_exec_script libexec/"imsg"
@@ -36,16 +18,19 @@ class Imsg < Formula
 
   def caveats
     <<~EOS
-      imsg reads ~/Library/Messages/chat.db and drives Messages.app via AppleScript.
-      Grant your terminal both permissions before running:
-        • System Settings → Privacy & Security → Full Disk Access
-        • System Settings → Privacy & Security → Automation → Messages
+      imsg needs Full Disk Access to read the Messages database.
 
-      For SMS relay, enable "Text Message Forwarding" on your iPhone to this Mac.
+      To grant permission:
+      1. Open System Settings > Privacy & Security > Full Disk Access
+      2. Enable access for your Terminal application
+
+      To send messages, allow Terminal to control Messages.app:
+      System Settings > Privacy & Security > Automation
     EOS
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/imsg --version")
+    assert_match "Send and read iMessage", shell_output("#{bin}/imsg --help")
   end
 end
