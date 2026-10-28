@@ -21,6 +21,10 @@ Version 0.3.12 also saves the service UUID and relative position for startup
 recovery. New services are named **HoRNDIS USB**, enable IPv4 DHCP, and appear
 last by default.
 
+Version 0.3.13 fixes the local-network permission regression in the v0.3.12
+ad-hoc distribution. The app and helpers use stable Apple-issued signatures;
+allow **HoRNDIS Status** local network access if macOS asks after upgrading.
+
 ### Install
 
 ```sh

@@ -1,15 +1,15 @@
 cask "horndis" do
-  version "0.3.12"
-  sha256 "b33d61ebe7be7e821d6e9ced7701504fd15617867f7dd7cd7fcaa0a2613847a3"
+  version "0.3.13"
+  sha256 "5dd8bcdecdf1eff239f4545ecc76c0f023a2acfba8ecc9f2d3623e6414a28fd9"
 
-  url "https://github.com/jlikeme/HoRNDIS-Userspace/releases/download/v0.3.12/HoRNDIS-Userspace-v0.3.12-macos-universal.pkg"
+  url "https://github.com/jlikeme/HoRNDIS-Userspace/releases/download/v0.3.13/HoRNDIS-Userspace-v0.3.13-macos-universal.pkg"
   name "HoRNDIS Userspace"
   desc "Android RNDIS USB tethering without a kernel extension"
   homepage "https://github.com/jlikeme/HoRNDIS-Userspace"
 
   depends_on macos: :big_sur
 
-  pkg "HoRNDIS-Userspace-v0.3.12-macos-universal.pkg"
+  pkg "HoRNDIS-Userspace-v0.3.13-macos-universal.pkg"
 
   # Resolve the operation when the bundled script actually runs. A constant
   # argument is safe to retain in Homebrew's installed JSON metadata.
