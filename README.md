@@ -17,6 +17,9 @@ bar app and the `horndis` command without a kernel extension or SIP changes.
 Optional features include SIM DNS and Intelligence integration with Surge,
 automatic USB tethering startup through an already-authorized ADB connection,
 and preservation of the HoRNDIS USB network service during upgrades and reinstalls.
+Version 0.3.12 also saves the service UUID and relative position for startup
+recovery. New services are named **HoRNDIS USB**, enable IPv4 DHCP, and appear
+last by default.
 
 ### Install
 
@@ -46,7 +49,9 @@ brew reinstall --cask jlikeme/tap/horndis
 
 With the enhanced package installed, replacement stops its background jobs and
 reuses the existing HoRNDIS USB service, preserving its identifier, network
-configuration and service order. Older upstream installations have a different
+configuration and service order. Startup reuses the saved UUID; when rebuilding
+is necessary, it restores the previous relative position without reordering
+other services. Older upstream installations have a different
 saved uninstaller; see the project's [upgrade guide](https://github.com/jlikeme/HoRNDIS-Userspace/blob/main/docs/USER_GUIDE.md#upgrade)
 for the first migration.
 
@@ -57,7 +62,8 @@ brew uninstall --cask jlikeme/tap/horndis
 ```
 
 A full uninstall removes the application's background services and its owned
-HoRNDIS USB network service.
+HoRNDIS USB network service and its saved recovery record. A later fresh install
+creates a new service with DHCP enabled at the end of the service list.
 
 ### Requirements and first launch
 
